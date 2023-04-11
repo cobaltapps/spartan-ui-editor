@@ -7,14 +7,10 @@
 	
 	    // Create Spartan version variable
 	    let spartanVersion = '0.9.0.2'
-	
-	    // Create setTimeout delay variable
-	    let displayDelay = 0
 
         // Set all of the localStorage items
 		if(localStorage.getItem('spartan_ui_version') === null) {
 			localStorage.setItem('spartan_ui_version', spartanVersion)
-			displayDelay = 1000
 		}
 		if(localStorage.getItem('spartan_ui_code_type') === null) {
 			localStorage.setItem('spartan_ui_code_type', 'css')
@@ -110,7 +106,7 @@
 		}
 		spartanUiLoadJs()
 	</script>`
-			const spartanHtml = `<div id="spartan-ui-container" style="display:none;">
+			const spartanHtml = `<div id="spartan-ui-container">
 				<div id="spartan-ui-inner">
 					<div id="spartan-ui-heading">
 						<div id="spartan-ui-code-select">
@@ -193,11 +189,6 @@
 			$('#spartan-ui-javascript-run').click(function() {
 				runJS()
 			})
-			
-    		// If first loaded in browser display Spartan with delay to prevent showing unstyled
-    		setTimeout(function() {
-    		    document.getElementById('spartan-ui-container').style.display = 'block'
-    		}, displayDelay)
 		}
 
         // Simple pure javascript dragable functionality
