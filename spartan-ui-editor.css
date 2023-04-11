@@ -1,0 +1,204 @@
+#spartan-ui-container,
+#spartan-ui-container *,
+#spartan-ui-container::before,
+#spartan-ui-container::after,
+#spartan-ui-container ::before,
+#spartan-ui-container ::after {
+	box-sizing: border-box;
+}
+
+#spartan-ui-container {
+	background-color: #333;
+	position: absolute;
+	top: calc(50% - 166px);
+	left: calc(50% - 250px);
+    z-index: 9999999999;
+	box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 5px;
+}
+
+#spartan-ui-inner {
+	width: 100%;
+}
+
+#spartan-ui-heading {
+	width: 100%;
+	height: 32px;
+	position: relative;
+}
+
+#spartan-ui-code-select,
+#spartan-ui-theme-select {
+	position: absolute;
+	top: 0;
+}
+
+#spartan-ui-code-select {
+	left: 0;
+}
+
+#spartan-ui-theme-select {
+	right: 0;
+}
+
+.spartan-ui-button,
+.spartan-ui-select {
+	height: 32px;
+	background-color: #444;
+	padding: 0 10px;
+	font-size: 12px;
+	color: #fff;
+	line-height: 32px;
+	text-align: center;
+	float: left;
+	display: block;
+}
+
+.spartan-ui-select {
+    width: 50px;
+}
+
+.spartan-ui-button {
+	height: 22px;
+    margin: 5px 6px;
+	border: 1px solid #28756d;
+	border-radius: 2px;
+	line-height: 20px;
+}
+
+.spartan-ui-button:hover,
+.spartan-ui-select:hover,
+.spartan-ui-selected {
+	background-color: #28756d;
+	box-shadow: none;
+	cursor: pointer;
+}
+
+#spartan-ui-javascript-run {
+    margin-right: 0;
+}
+
+#spartan-ui-font-size-toggle {
+    margin-left: 0;
+}
+
+#spartan-ui-drag-container {
+    width: 92px;
+    height: 32px;
+    margin: 0 auto;
+    padding: 4px 34px;
+    cursor: move;
+}
+
+.spartan-ui-content {
+	width: 500px;
+	min-width: 400px;
+	height: 300px;
+	min-height: 100px;
+	resize: both;
+}
+
+.spartan-ui-theme-dark .ace_scrollbar-v::-webkit-scrollbar,
+.spartan-ui-theme-dark .ace_scrollbar-h::-webkit-scrollbar {
+	background: #272727;
+}
+
+.spartan-ui-theme-dark .ace_scrollbar-v::-webkit-scrollbar-thumb,
+.spartan-ui-theme-dark .ace_scrollbar-h::-webkit-scrollbar-thumb {
+	background: #444;
+	border: 1px solid #444;
+}
+
+.spartan-ui-loaded .ace_autocomplete {
+    z-index: 99999999999;
+}
+
+.spartan-ui-loaded .ace_tooltip {
+    border-color: #ccc;
+	color: #333;
+	font-size: 13px;
+	z-index: 99999999999;
+}
+
+.spartan-ui-loaded .ace_tooltip hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #fafafa;
+	margin: 0;
+}
+
+.spartan-ui-loaded.spartan-ui-theme-dark .ace_search_form input,
+.spartan-ui-loaded.spartan-ui-theme-dark .ace_replace_form input {
+    border: none;
+}
+
+.spartan-ui-loaded .ace_search_form input:focus,
+.spartan-ui-loaded .ace_replace_form input:focus {
+	outline: none;
+}
+
+.spartan-ui-loaded.spartan-ui-theme-dark .ace_tooltip {
+    background-color: #444;
+    border-color: #666;
+	color: #ddd;
+}
+
+.spartan-ui-loaded.spartan-ui-theme-dark .ace_tooltip hr {
+    border-top-color: #333;
+    border-bottom-color: #555;
+}
+
+.spartan-ui-loaded .ace_search {
+	background: #f0f0f0;
+}
+
+.spartan-ui-loaded.spartan-ui-theme-dark .ace_search {
+	background: #292929;
+	border-color: #222;
+}
+
+.spartan-ui-loaded.spartan-ui-theme-dark .ace_search .ace_search_field {
+    background: #444;
+    color: #ccc;
+}
+
+.spartan-ui-loaded.spartan-ui-theme-dark .ace_search .ace_searchbtn {
+    background: #444;
+    border: none;
+    border-left: 1px solid #222;
+    color: #ccc;
+}
+
+.spartan-ui-loaded.spartan-ui-theme-dark .ace_search .ace_searchbtn:hover {
+    background: #3a3a3a;
+}
+
+.spartan-ui-loaded.spartan-ui-theme-dark .ace_search .ace_button {
+    background: #444;
+    color: #ccc;
+}
+
+.spartan-ui-loaded.spartan-ui-theme-dark .ace_search .ace_button:hover {
+    background: #3a3a3a;
+}
+
+.spartan-ui-loaded.spartan-ui-theme-dark .ace_search_form.ace_nomatch  {
+	outline: 1px solid #b33737;
+}
+
+.spartan-ui-loaded .ace_search_form button,
+.spartan-ui-loaded .ace_replace_form button {
+	background: #fff;
+	padding: 0;
+	color: #333;
+	font-size: 12px;
+	font-weight: normal;
+}
+
+.spartan-ui-loaded .ace_replace_form button {
+	padding: 0 5px;
+}
+
+.spartan-ui-loaded .ace_search_form button:hover,
+.spartan-ui-loaded .ace_replace_form button:hover {
+	background: #eee;
+}
