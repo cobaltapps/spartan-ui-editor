@@ -89,6 +89,10 @@
     cursor: move;
 }
 
+#spartan-ui-drag-icon {
+    vertical-align: baseline;
+}
+
 .spartan-ui-content {
 	width: 500px;
 	min-width: 400px;
