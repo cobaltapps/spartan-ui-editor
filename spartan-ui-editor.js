@@ -1,12 +1,12 @@
 /*
- * Spartan UI Editor v0.9.0.2
+ * Spartan UI Editor v0.9.0.4
  */
 (function() {
 
 	if(!document.body.classList.contains('spartan-ui-loaded')) { // Only load this code once
 	
 	    // Create Spartan version variable
-	    let spartanVersion = '0.9.0.2'
+	    let spartanVersion = '0.9.0.4'
 
         // Set all of the localStorage items
 		if(localStorage.getItem('spartan_ui_version') === null) {
