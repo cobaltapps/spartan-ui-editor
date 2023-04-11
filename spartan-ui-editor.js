@@ -1,11 +1,21 @@
 /*
- * Spartan UI Editor v0.9.0.1
+ * Spartan UI Editor v0.9.0.2
  */
 (function() {
 
 	if(!document.body.classList.contains('spartan-ui-loaded')) { // Only load this code once
+	
+	    // Create Spartan version variable
+	    let spartanVersion = '0.9.0.2'
+	
+	    // Create setTimeout delay variable
+	    let displayDelay = 0
 
         // Set all of the localStorage items
+		if(localStorage.getItem('spartan_ui_version') === null) {
+			localStorage.setItem('spartan_ui_version', spartanVersion)
+			displayDelay = 1000
+		}
 		if(localStorage.getItem('spartan_ui_code_type') === null) {
 			localStorage.setItem('spartan_ui_code_type', 'css')
 		}
@@ -100,7 +110,7 @@
 		}
 		spartanUiLoadJs()
 	</script>`
-			const spartanHtml = `<div id="spartan-ui-container">
+			const spartanHtml = `<div id="spartan-ui-container" style="display:none;">
 				<div id="spartan-ui-inner">
 					<div id="spartan-ui-heading">
 						<div id="spartan-ui-code-select">
@@ -118,7 +128,7 @@
 						</div>
 					</div>
 					<div id="spartan-ui-content-css" class="spartan-ui-content"></div>
-					<div id="spartan-ui-content-javascript" class="spartan-ui-content" style="display:none"></div>
+					<div id="spartan-ui-content-javascript" class="spartan-ui-content" style="display:none;"></div>
 				</div>
 			</div>`
 			$('head').append(styleTag).append(scriptTag)
@@ -127,10 +137,12 @@
 
         // Initialize general Sparton functionality
 		function spartanInit() {
+		    
 			$('#spartan-ui-code-select span, #spartan-ui-theme-select span').click(function() {
 				$(this).parent().find('span').removeClass('spartan-ui-selected')
 				$(this).addClass('spartan-ui-selected')
 			})
+			
 			$('#spartan-ui-code-select span').click(function() {
 				let codeType = $(this).attr('id').split('-').pop()
 				$('.spartan-ui-content').hide()
@@ -146,6 +158,7 @@
 			if(localStorage.getItem('spartan_ui_code_type') == 'js') {
 				$('#spartan-ui-select-javascript').click()
 			}
+			
 			$('#spartan-ui-font-size-toggle').text(localStorage.getItem('spartan_ui_font_size') + 'px')
 			$('#spartan-ui-font-size-toggle').click(function() {
         		if(localStorage.getItem('spartan_ui_font_size') == '12') {
@@ -172,11 +185,19 @@
 				}
 			})
 			$('#spartan-ui-select-' + localStorage.getItem('spartan_ui_theme_type')).click()
+			
 			spartanDraggable()
+			
 			aceInit()
+			
 			$('#spartan-ui-javascript-run').click(function() {
 				runJS()
 			})
+			
+    		// If first loaded in browser display Spartan with delay to prevent showing unstyled
+    		setTimeout(function() {
+    		    document.getElementById('spartan-ui-container').style.display = 'block'
+    		}, displayDelay)
 		}
 
         // Simple pure javascript dragable functionality
