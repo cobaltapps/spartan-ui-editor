@@ -1,7 +1,11 @@
+/*
+ * Spartan UI Editor v0.9.0
+ */
 (function() {
 
-	if(!document.body.classList.contains('spartan-ui-loaded')) {
+	if(!document.body.classList.contains('spartan-ui-loaded')) { // Only load this code once
 
+        // Set all of the localStorage items
 		if(localStorage.getItem('spartan_ui_code_type') === null) {
 			localStorage.setItem('spartan_ui_code_type', 'css')
 		}
@@ -22,6 +26,7 @@
 		document.body.classList.add('spartan-ui-active')
 		const spartanPath = document.currentScript.src.replace(/[^\/]+$/,'')
 
+        // Load the Sparton stylesheet into the head
 		function loadStyles() {
 			let styles = [
 				spartanPath + 'spartan-ui-editor.css'
@@ -36,7 +41,8 @@
 			})
 		}
 		loadStyles()
-
+        
+        // Load the appropriate scripts necessary to run Sparton
 		function loadScript(url) {
 			return new Promise(function(resolve, reject) {
 				let script = document.createElement('script')
@@ -81,7 +87,8 @@
 			}).catch(function(script) {
 				console.log(script)
 			})
-
+        
+        // Build the Sparton HTML
 		function buildHTML() {
 			const styleTag = '<style id="spartan-ui-ace-css"></style>'
 			const scriptTag = `<script>
@@ -118,6 +125,7 @@
 			$('body').prepend(spartanHtml)
 		}
 
+        // Initialize general Sparton functionality
 		function spartanInit() {
 			$('#spartan-ui-code-select span, #spartan-ui-theme-select span').click(function() {
 				$(this).parent().find('span').removeClass('spartan-ui-selected')
@@ -171,6 +179,7 @@
 			})
 		}
 
+        // Simple pure javascript dragable functionality
 		function spartanDraggable() {
 			let spartanContainer = document.getElementById('spartan-ui-container'),
 				container = document.body,
@@ -201,6 +210,7 @@
 			}
 		}
 
+        // Initialize the Ace Editor
 		function aceInit() {
 			$('.spartan-ui-content').each(function() {
 				let contentID = $(this).attr('id'),
@@ -244,7 +254,8 @@
                 })
 			})
 		}
-
+        
+        // Execute any JS code inside the JS editor
 		function runJS() {
 			let code = $('#spartan-ui-ace-javascript').text()
 			$('#spartan-ui-ace-javascript').remove()
@@ -252,7 +263,7 @@
 			$('#spartan-ui-drag-icon').fadeOut(1000).fadeIn(1000)
 		}
 
-	} else {
+	} else { // Once loaded then simply show/hide Sparton
 
 		if(document.body.classList.contains('spartan-ui-active')) {
 			document.body.classList.remove('spartan-ui-active')
