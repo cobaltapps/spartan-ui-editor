@@ -9,7 +9,7 @@
 
 #spartan-ui-container {
 	background-color: #333;
-	position: absolute;
+	position: fixed;
 	top: calc(50% - 166px);
 	left: calc(50% - 250px);
     z-index: 9999999999;

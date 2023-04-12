@@ -272,7 +272,14 @@
 			let code = $('#spartan-ui-ace-javascript').text()
 			$('#spartan-ui-ace-javascript').remove()
 			spartanUiLoadJs(code)
-			$('#spartan-ui-drag-icon').fadeOut(1000).fadeIn(1000)
+			// Ensure that the Sparton icon does not fade in and out more than necessary
+			if(!$('body').hasClass('spartan-ui-js-code-running')) {
+			    $('body').addClass('spartan-ui-js-code-running')
+			    $('#spartan-ui-drag-icon').fadeOut(1000).fadeIn(1000)
+			    setTimeout(function() {
+			        $('body').removeClass('spartan-ui-js-code-running')
+			    }, (2000))
+			}
 		}
 
 	} else { // Once loaded then simply show/hide Sparton
