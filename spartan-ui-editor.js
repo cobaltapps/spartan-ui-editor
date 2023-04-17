@@ -1,12 +1,12 @@
 /*
- * Spartan UI Editor v0.9.0.4
+ * Spartan UI Editor v0.9.0.5
  */
 (function() {
 
 	if(!document.body.classList.contains('spartan-ui-loaded')) { // Only load this code once
 	
 	    // Create Spartan version variable
-	    let spartanVersion = '0.9.0.4'
+	    let spartanVersion = '0.9.0.5'
 
         // Set all of the localStorage items
 		if(localStorage.getItem('spartan_ui_version') === null) {
@@ -32,7 +32,7 @@
 		document.body.classList.add('spartan-ui-active')
 		const spartanPath = document.currentScript.src.replace(/[^\/]+$/,'')
 
-        // Load the Sparton stylesheet into the head
+        // Load the Spartan stylesheet into the head
 		function loadStyles() {
 			let styles = [
 				spartanPath + 'spartan-ui-editor.css'
@@ -48,7 +48,7 @@
 		}
 		loadStyles()
         
-        // Load the appropriate scripts necessary to run Sparton
+        // Load the appropriate scripts necessary to run Spartan
 		function loadScript(url) {
 			return new Promise(function(resolve, reject) {
 				let script = document.createElement('script')
@@ -65,7 +65,6 @@
 		}
 
 		let scripts = [
-			'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js',
 			'https://cdn.jsdelivr.net/gh/ajaxorg/ace-builds@1.16.0/src-min-noconflict/ace.js',
 			'https://cdn.jsdelivr.net/gh/ajaxorg/ace-builds@1.16.0/src-min-noconflict/ext-language_tools.min.js',
 			'https://cdn.jsdelivr.net/gh/ajaxorg/ace-builds@1.16.0/src-min-noconflict/ext-searchbox.min.js',
@@ -86,28 +85,32 @@
 
 		Promise.all(promises)
 			.then(function() {
-				$(document).ready(function() {
-					buildHTML()
-					spartanInit()
-				})
+			    buildHTML()
+				spartanInit()
 			}).catch(function(script) {
 				console.log(script)
 			})
         
-        // Build the Sparton HTML
+        // Build the Spartan HTML
 		function buildHTML() {
-			const styleTag = '<style id="spartan-ui-ace-css"></style>'
-			const scriptTag = `<script>
-		function spartanUiLoadJs(code = '/* ¯\_(ツ)_/¯ */') {
+		    
+            let style = document.createElement('style')
+            style.id = 'spartan-ui-ace-css'
+            document.head.appendChild(style)
+            
+            let script = document.createElement('script')
+            script.innerHTML = `function spartanUiLoadJs(code = '/* ¯\_(ツ)_/¯ */') {
 			let scriptTag = document.createElement('script')
 			scriptTag.id = 'spartan-ui-ace-javascript'
 			document.head.appendChild(scriptTag)
 			document.getElementById('spartan-ui-ace-javascript').innerHTML = code
 		}
-		spartanUiLoadJs()
-	</script>`
-			const spartanHtml = `<div id="spartan-ui-container">
-				<div id="spartan-ui-inner">
+		spartanUiLoadJs()`
+		    document.head.appendChild(script)
+		
+			let html = document.createElement('div')
+			html.id = 'spartan-ui-container'
+			html.innerHTML = `<div id="spartan-ui-inner">
 					<div id="spartan-ui-heading">
 						<div id="spartan-ui-code-select">
 							<span id="spartan-ui-select-css" class="spartan-ui-select spartan-ui-selected">CSS</span>
@@ -115,7 +118,7 @@
 							<div id="spartan-ui-javascript-run" class="spartan-ui-button" style="display:none;">Run JS</div>
 						</div>
 						<div id="spartan-ui-drag-container">
-							<img id="spartan-ui-drag-icon" src="` + spartanPath + `spartan-icon.png"/>
+							<img id="spartan-ui-drag-icon" class="spartan-ui-drag-icon-show" src="` + spartanPath + `spartan-icon.png"/>
 						</div>
 						<div id="spartan-ui-theme-select">
 						    <div id="spartan-ui-font-size-toggle" class="spartan-ui-button" title="Toggle Font Size">12px</div>
@@ -125,74 +128,98 @@
 					</div>
 					<div id="spartan-ui-content-css" class="spartan-ui-content"></div>
 					<div id="spartan-ui-content-javascript" class="spartan-ui-content" style="display:none;"></div>
-				</div>
-			</div>`
-			$('head').append(styleTag).append(scriptTag)
-			$('body').prepend(spartanHtml)
+				</div>`
+			document.body.appendChild(html)
+			
 		}
 
-        // Initialize general Sparton functionality
+        // Initialize general Spartan functionality
 		function spartanInit() {
+
+		    let tabSelector = document.querySelectorAll('.spartan-ui-select')
+            tabSelector.forEach(function(tab) {
+                tab.addEventListener('click', function(e) {
+                    selectToggleClass(e.target)
+                    if(e.target.parentNode.getAttribute('id') == 'spartan-ui-code-select') {
+                        selectToggleCode(e.target)
+                    } else if(e.target.parentNode.getAttribute('id') == 'spartan-ui-theme-select') {
+                        selectToggleTheme(e.target)
+                    }
+                })
+            })
 		    
-			$('#spartan-ui-code-select span, #spartan-ui-theme-select span').click(function() {
-				$(this).parent().find('span').removeClass('spartan-ui-selected')
-				$(this).addClass('spartan-ui-selected')
-			})
-			
-			$('#spartan-ui-code-select span').click(function() {
-				let codeType = $(this).attr('id').split('-').pop()
-				$('.spartan-ui-content').hide()
-				$('#spartan-ui-content-' + codeType).show()
+		    function selectToggleClass(el) {
+                let tabs = el.parentNode.querySelectorAll('span')
+                tabs.forEach(tab => {
+                    tab.classList.remove('spartan-ui-selected')
+                })
+				el.classList.add('spartan-ui-selected')
+		    }
+            
+		    function selectToggleCode(el) {
+				let codeType = el.getAttribute('id').split('-').pop()
+                document.querySelectorAll('.spartan-ui-content').forEach(function(el) {
+                    el.style.display = 'none'
+                })
+                document.getElementById('spartan-ui-content-' + codeType).style.display = 'block'
 				if(codeType == 'javascript') {
-					$('#spartan-ui-javascript-run').show()
+				    document.getElementById('spartan-ui-javascript-run').style.display = 'block'
 					localStorage.setItem('spartan_ui_code_type', 'js')
 				} else {
-					$('#spartan-ui-javascript-run').hide()
+					document.getElementById('spartan-ui-javascript-run').style.display = 'none'
 					localStorage.setItem('spartan_ui_code_type', 'css')
 				}
-			})
+		    }
 			if(localStorage.getItem('spartan_ui_code_type') == 'js') {
-				$('#spartan-ui-select-javascript').click()
+				document.getElementById('spartan-ui-select-javascript').click()
 			}
+		    
+		    function selectToggleTheme(el) {
+				let themeType = el.getAttribute('id').split('-').pop()
+				if(themeType != localStorage.getItem('spartan_ui_theme_type')) {
+				    alert('Refresh browser to finalize editor theme change.')
+				}
+				if(themeType == 'light') {
+				    if(document.body.classList.contains('spartan-ui-theme-dark')) {
+				        document.body.classList.remove('spartan-ui-theme-dark')
+				    }
+				    document.body.classList.add('spartan-ui-theme-light')
+					localStorage.setItem('spartan_ui_theme_type', 'light')
+				} else {
+				    if(document.body.classList.contains('spartan-ui-theme-light')) {
+				        document.body.classList.remove('spartan-ui-theme-light')
+				    }
+				    document.body.classList.add('spartan-ui-theme-dark')
+					localStorage.setItem('spartan_ui_theme_type', 'dark')
+				}
+		    }
+		    document.getElementById('spartan-ui-select-' + localStorage.getItem('spartan_ui_theme_type')).click()
 			
-			$('#spartan-ui-font-size-toggle').text(localStorage.getItem('spartan_ui_font_size') + 'px')
-			$('#spartan-ui-font-size-toggle').click(function() {
+			document.getElementById('spartan-ui-font-size-toggle').textContent = localStorage.getItem('spartan_ui_font_size') + 'px'
+			document.getElementById('spartan-ui-font-size-toggle').addEventListener('click', (e) => {
         		if(localStorage.getItem('spartan_ui_font_size') == '12') {
-        		    $(this).text('14px')
+        		    e.target.textContent = '14px'
         			localStorage.setItem('spartan_ui_font_size', '14')
         		} else {
-        		    $(this).text('12px')
+        		    e.target.textContent = '12px'
         		    localStorage.setItem('spartan_ui_font_size', '12')
         		}
         		alert('Refresh browser to finalize editor font size change.')
 			})
 			
-			$('#spartan-ui-theme-select span').click(function() {
-				let themeType = $(this).attr('id').split('-').pop()
-				if(themeType != localStorage.getItem('spartan_ui_theme_type')) {
-				    alert('Refresh browser to finalize editor theme change.')
-				}
-				if(themeType == 'light') {
-				    $('body').removeClass('spartan-ui-theme-dark').addClass('spartan-ui-theme-light')
-					localStorage.setItem('spartan_ui_theme_type', 'light')
-				} else {
-				    $('body').removeClass('spartan-ui-theme-light').addClass('spartan-ui-theme-dark')
-					localStorage.setItem('spartan_ui_theme_type', 'dark')
-				}
-			})
-			$('#spartan-ui-select-' + localStorage.getItem('spartan_ui_theme_type')).click()
-			
 			spartanDraggable()
 			
 			aceInit()
 			
-			$('#spartan-ui-javascript-run').click(function() {
-				runJS()
+			document.getElementById('spartan-ui-javascript-run').addEventListener('click', () => {
+        		runJS()
 			})
+			
 		}
 
         // Simple pure javascript dragable functionality
 		function spartanDraggable() {
+		    
 			let spartanContainer = document.getElementById('spartan-ui-container'),
 				container = document.body,
 				originalY, elementY, originalX, elementX
@@ -220,20 +247,23 @@
 				spartanContainer.style.left = Math.min(Math.max(container.getBoundingClientRect().left, elementX), container.getBoundingClientRect().right- spartanContainer.offsetWidth) + 'px'
 				spartanContainer.style.top = Math.min(Math.max(container.getBoundingClientRect().top, elementY), container.getBoundingClientRect().bottom - spartanContainer.offsetHeight) + 'px'
 			}
+			
 		}
 
         // Initialize the Ace Editor
 		function aceInit() {
-			$('.spartan-ui-content').each(function() {
-				let contentID = $(this).attr('id'),
+		    
+		    let spartanContent = document.querySelectorAll('.spartan-ui-content')
+            spartanContent.forEach(function(content) {
+				let contentID = content.getAttribute('id'),
 					codeType = contentID.split('-').pop(),
 					editor = ace.edit(contentID)
         		if(codeType == 'css') {
         		    editor.getSession().setValue(localStorage.getItem('spartan_ui_css_code'))
-        		    $('#spartan-ui-ace-css').text(editor.getSession().getValue())
+        		    document.getElementById('spartan-ui-ace-css').textContent = editor.getSession().getValue()
         		} else if(codeType == 'javascript') {
         		    editor.getSession().setValue(localStorage.getItem('spartan_ui_js_code'))
-        		    $('#spartan-ui-ace-javascript').text(editor.getSession().getValue())
+        		    document.getElementById('spartan-ui-ace-javascript').textContent = editor.getSession().getValue()
         		}
 				if(localStorage.getItem('spartan_ui_theme_type') == 'light') {
 					editor.setTheme('ace/theme/textmate')
@@ -250,39 +280,43 @@
                     useSoftTabs: true,
                     fontSize: localStorage.getItem('spartan_ui_font_size') + 'px'
                 })
-				editor.getSession().on('change', function() {
+                editor.getSession().addEventListener('change', function(e) {
 					if(codeType == 'css') {
-						$('#spartan-ui-ace-css').text(editor.getSession().getValue())
+						document.getElementById('spartan-ui-ace-css').textContent = editor.getSession().getValue()
 						localStorage.setItem('spartan_ui_css_code', editor.getSession().getValue())
 					} else if(codeType == 'javascript') {
-						$('#spartan-ui-ace-javascript').text(editor.getSession().getValue())
+						document.getElementById('spartan-ui-ace-javascript').textContent = editor.getSession().getValue()
 						localStorage.setItem('spartan_ui_js_code', editor.getSession().getValue())
 					}
-				})
-                $('.spartan-ui-content').each(function() {
-                    new ResizeObserver(() => {
-                        editor.resize()
-                    }).observe($(this)[0])
                 })
-			})
+                new ResizeObserver(() => {
+                    editor.resize()
+                }).observe(content)
+            })
+			
 		}
         
         // Execute any JS code inside the JS editor
 		function runJS() {
-			let code = $('#spartan-ui-ace-javascript').text()
-			$('#spartan-ui-ace-javascript').remove()
+		    
+			let code = document.getElementById('spartan-ui-ace-javascript').textContent
+			document.getElementById('spartan-ui-ace-javascript').remove()
 			spartanUiLoadJs(code)
-			// Ensure that the Sparton icon does not fade in and out more than necessary
-			if(!$('body').hasClass('spartan-ui-js-code-running')) {
-			    $('body').addClass('spartan-ui-js-code-running')
-			    $('#spartan-ui-drag-icon').fadeOut(1000).fadeIn(1000)
+			// Ensure that the Spartan icon does not fade in and out more than necessary
+			if(!document.body.classList.contains('spartan-ui-js-code-running')) {
+			    document.body.classList.add('spartan-ui-js-code-running')
+			    document.getElementById('spartan-ui-drag-icon').classList.replace('spartan-ui-drag-icon-show', 'spartan-ui-drag-icon-hide')
 			    setTimeout(function() {
-			        $('body').removeClass('spartan-ui-js-code-running')
+			        document.getElementById('spartan-ui-drag-icon').classList.replace('spartan-ui-drag-icon-hide', 'spartan-ui-drag-icon-show')
+			    }, (1000))
+			    setTimeout(function() {
+			        document.body.classList.remove('spartan-ui-js-code-running')
 			    }, (2000))
 			}
+			
 		}
 
-	} else { // Once loaded then simply show/hide Sparton
+	} else { // Once loaded then simply show/hide Spartan
 
 		if(document.body.classList.contains('spartan-ui-active')) {
 			document.body.classList.remove('spartan-ui-active')

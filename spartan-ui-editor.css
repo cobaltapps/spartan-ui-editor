@@ -93,6 +93,16 @@
     vertical-align: baseline;
 }
 
+.spartan-ui-drag-icon-show {
+    opacity: 1;
+    transition: opacity 1000ms;
+}
+
+.spartan-ui-drag-icon-hide {
+    opacity: 0;
+    transition: opacity 1000ms;
+}
+
 .spartan-ui-content {
 	width: 500px;
 	min-width: 400px;
